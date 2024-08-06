@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DemoContextPage extends StatefulWidget {
-  const DemoContextPage({super.key});
+  int number = 20;
 
   @override
   State<DemoContextPage> createState() => _DemoContextPageState();
 }
 
 class _DemoContextPageState extends State<DemoContextPage> {
+  String label = "Demo context Page";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +40,11 @@ class ParentWidget extends StatefulWidget {
 class _ParentWidgetState extends State<ParentWidget> {
   @override
   Widget build(BuildContext context) {
+    DemoContextPage? demoWidget = context.findAncestorWidgetOfExactType();
     return Container(
       child: Column(
         children: [
-          Text("Parent widget"),
+          Text("Parent widget get data: ${demoWidget?.number}"),
           widget.child
         ],
       ),
@@ -54,8 +57,9 @@ class ChildWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _DemoContextPageState? demoState = context.findAncestorStateOfType();
     return Container(
-      child: Text("Child widget"),
+      child: Text("Child widget ${demoState?.label}"),
     );
   }
 }

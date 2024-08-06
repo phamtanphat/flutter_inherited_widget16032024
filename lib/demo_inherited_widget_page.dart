@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DemoInheritedWidgetPage extends StatefulWidget {
@@ -8,6 +9,9 @@ class DemoInheritedWidgetPage extends StatefulWidget {
 }
 
 class _DemoInheritedWidgetPageState extends State<DemoInheritedWidgetPage> {
+  String text = "Hello";
+  int number = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,16 +22,43 @@ class _DemoInheritedWidgetPageState extends State<DemoInheritedWidgetPage> {
         child: Center(
           child: Column(
             children: [
-              ParentWidget(),
-              ChildWidget()
+              Text("Demo widget $number"),
+              ElevatedButton(onPressed: () {
+                setState(() {
+                  number += 1;
+                });
+              }, child: Text("Increase number")),
+              MyInheritedWidget(
+                value: text,
+                child: Column(
+                  children: [
+                    ParentWidget(),
+                    ChildWidget()
+                  ],
+                ),
+              ),
             ],
-          ),
+          )
         ),
       ),
     );
   }
 }
 
+class MyInheritedWidget extends InheritedWidget {
+  String value;
+  Widget child;
+
+  MyInheritedWidget({
+    required this.value,
+    required this.child
+  }): super(child: child);
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return false;
+  }
+}
 
 class ParentWidget extends StatefulWidget {
   const ParentWidget({super.key});
@@ -39,6 +70,7 @@ class ParentWidget extends StatefulWidget {
 class _ParentWidgetState extends State<ParentWidget> {
   @override
   Widget build(BuildContext context) {
+    print("Parent widget build");
     return Container(
       child: Text("Parent widget"),
     );
@@ -51,6 +83,7 @@ class ChildWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Child widget build");
     return Container(
       child: Text("Child widget"),
     );

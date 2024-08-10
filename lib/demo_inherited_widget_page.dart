@@ -9,8 +9,6 @@ class DemoInheritedWidgetPage extends StatefulWidget {
 }
 
 class _DemoInheritedWidgetPageState extends State<DemoInheritedWidgetPage> {
-  String text = "Hello";
-  int number = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +16,35 @@ class _DemoInheritedWidgetPageState extends State<DemoInheritedWidgetPage> {
       appBar: AppBar(
         title: Text("Demo inherited widget"),
       ),
-      body: Container(
-        child: Center(
+      body: DemoInheritedWidget(
+        child: const Column(
+          children: [
+            ParentWidget(),
+            ChildWidget()
+          ],
+        ),
+      )
+    );
+  }
+}
+
+class DemoInheritedWidget extends StatefulWidget {
+  Widget child;
+
+  DemoInheritedWidget({required this.child});
+
+  @override
+  State<DemoInheritedWidget> createState() => _DemoInheritedWidgetState();
+}
+
+class _DemoInheritedWidgetState extends State<DemoInheritedWidget> {
+  String text = "Hello";
+  int number = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
           child: Column(
             children: [
               Text("Demo widget $number"),
@@ -27,23 +52,18 @@ class _DemoInheritedWidgetPageState extends State<DemoInheritedWidgetPage> {
                 setState(() {
                   number += 1;
                 });
-              }, child: Text("Increase number")),
+              }, child: const Text("Increase number")),
               MyInheritedWidget(
                 value: text,
-                child: Column(
-                  children: [
-                    ParentWidget(),
-                    ChildWidget()
-                  ],
-                ),
+                child: widget.child
               ),
             ],
           )
-        ),
       ),
     );
   }
 }
+
 
 class MyInheritedWidget extends InheritedWidget {
   String value;
@@ -56,7 +76,7 @@ class MyInheritedWidget extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return false;
+    return true;
   }
 }
 

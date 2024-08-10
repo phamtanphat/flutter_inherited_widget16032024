@@ -64,7 +64,6 @@ class _DemoInheritedWidgetState extends State<DemoInheritedWidget> {
   }
 }
 
-
 class MyInheritedWidget extends InheritedWidget {
   String value;
   Widget child;
@@ -73,6 +72,10 @@ class MyInheritedWidget extends InheritedWidget {
     required this.value,
     required this.child
   }): super(child: child);
+
+  static MyInheritedWidget? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType();
+  }
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
@@ -91,8 +94,14 @@ class _ParentWidgetState extends State<ParentWidget> {
   @override
   Widget build(BuildContext context) {
     print("Parent widget build");
+    MyInheritedWidget? myInheritedWidget = MyInheritedWidget.of(context);
     return Container(
-      child: Text("Parent widget"),
+      child: Column(
+        children: [
+          Text("Parent widget"),
+          Text("Data from inherited widget ${myInheritedWidget?.value}")
+        ],
+      ),
     );
   }
 }
